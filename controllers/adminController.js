@@ -6,6 +6,8 @@ const Article = require("../models/Article");
 const Link = require("../models/Link");
 const Profile = require("../models/Profile");
 const RepoOverride = require("../models/RepoOverride");
+const SecurityBlock = require("../models/SecurityBlock");
+const { removeBlock } = require("../middleware/security");
 const { getCategorizedRepos, clearCache } = require("../services/githubService");
 
 // ── Sanitizer config: lets the admin paste raw HTML (h1, img, etc.) safely ──
@@ -232,6 +234,32 @@ exports.linkDelete = async (req, res, next) => {
   try {
     await Link.findByIdAndDelete(req.params.id);
     res.redirect("/admin/links");
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ─────────────────────────── SECURITY ───────────────────────────
+
+exports.securityPage = async (req, res, next) => {
+  try {
+    const blocks = await SecurityBlock.find({ kind: "ip" }).sort({ createdAt: -1 });
+    res.render("admin/security", {
+      title: "Blocked IPs — Devlogr Admin",
+      page: "security",
+      blocks,
+      layout: false,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.securityBlockDelete = async (req, res, next) => {
+  try {
+    const block = await SecurityBlock.findById(req.params.id).lean();
+    if (block) await removeBlock(block);
+    res.redirect("/admin/security");
   } catch (err) {
     next(err);
   }

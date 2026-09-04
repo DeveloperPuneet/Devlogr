@@ -5,6 +5,7 @@ const path = require("path");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const bcrypt = require("bcryptjs");
+const axios = require("axios");
 
 const connectDB = require("./config/db");
 const indexRoutes = require("./routes/index");
@@ -13,6 +14,17 @@ const securityGuard = require("./middleware/security");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const KEEP_ALIVE_URL = process.env.KEEP_ALIVE_URL || "https://devlogr.onrender.com";
+const KEEP_ALIVE_INTERVAL_MS = 13 * 60 * 1000;
+
+async function keepAlive() {
+  try {
+    await axios.get(KEEP_ALIVE_URL, { timeout: 10000 });
+    console.log(`Keep-alive request sent to ${KEEP_ALIVE_URL}`);
+  } catch (err) {
+    console.error(`Keep-alive request failed: ${err.message}`);
+  }
+}
 
 async function bootstrap() {
   await connectDB();
@@ -91,6 +103,8 @@ async function bootstrap() {
 
   app.listen(PORT, () => {
     console.log(`🚀 Devlogr running at http://localhost:${PORT}`);
+    keepAlive();
+    setInterval(keepAlive, KEEP_ALIVE_INTERVAL_MS);
   });
 }
 

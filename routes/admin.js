@@ -29,6 +29,10 @@ router.post("/links/new", admin.linkCreate);
 router.post("/links/:id/edit", admin.linkUpdate);
 router.post("/links/:id/delete", admin.linkDelete);
 
+// Security
+router.get("/security", admin.securityPage);
+router.post("/security/:id/delete", admin.securityBlockDelete);
+
 // Profile
 router.get("/profile", admin.profilePage);
 router.post("/profile", admin.profileUpdate);

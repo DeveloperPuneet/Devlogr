@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body class="page-admin">
+  <div class="admin-shell">
+    <%- include('partials/sidebar') %>
+
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <div>
+          <h1>Blocked IPs</h1>
+          <p class="admin-sub">Review rate-limited addresses and remove them from the active block.</p>
+        </div>
+      </div>
+
+      <div class="admin-table glass">
+        <% if (!blocks.length) { %>
+          <p class="empty-state">No blocked IPs.</p>
+        <% } %>
+        <% blocks.forEach(function(block){ %>
+          <div class="admin-table-row">
+            <div class="admin-table-main">
+              <span class="admin-table-title"><%= block.value %></span>
+              <span class="admin-table-meta"><%= block.reason %> · blocked <%= block.createdAt.toLocaleString() %> · expires <%= block.expiresAt.toLocaleString() %></span>
+            </div>
+            <form method="POST" action="/admin/security/<%= block._id %>/delete" onsubmit="return confirm('Remove <%= block.value %> from the block?')">
+              <button type="submit" class="icon-btn icon-btn-danger" title="Unblock IP">🗑️ Remove block</button>
+            </form>
+          </div>
+        <% }) %>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

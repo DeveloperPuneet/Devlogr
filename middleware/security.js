@@ -139,6 +139,18 @@ async function createBlocks(signaturesToBlock, reason, now) {
   return expiresAt;
 }
 
+async function removeBlock(block) {
+  const signaturesToRemove = [{ kind: block.kind, value: block.value }];
+  if (block.kind === "ip") {
+    signaturesToRemove.push({ kind: "network", value: networkFor(block.value) });
+  }
+
+  await SecurityBlock.deleteMany({ $or: signaturesToRemove });
+  for (const signature of signaturesToRemove) {
+    cachedBlocks.delete(`${signature.kind}:${signature.value}`);
+  }
+}
+
 async function securityGuard(req, res, next) {
   const now = Date.now();
   const requestSignatures = signatures(req);
@@ -174,3 +186,4 @@ async function securityGuard(req, res, next) {
 }
 
 module.exports = securityGuard;
+module.exports.removeBlock = removeBlock;
