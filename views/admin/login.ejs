@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body class="page-admin admin-login-page">
+  <div class="bg-blobs" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+  </div>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <div class="admin-login-wrap">
+    <a href="/" class="brand admin-login-brand">
+      <img src="/images/logo.svg" alt="Devlogr logo" class="brand-logo" />
+      <span class="brand-text">Devlogr</span>
+    </a>
+
+    <div class="admin-login-card glass">
+      <h1>Admin Access</h1>
+      <p class="admin-login-sub">Enter the panel password to manage projects, links &amp; articles.</p>
+
+      <% if (error) { %>
+        <div class="admin-error"><%= error %></div>
+      <% } %>
+
+      <form method="POST" action="/admin/login" class="admin-login-form">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required autofocus placeholder="••••••••••" />
+        <button type="submit" class="btn btn-primary btn-block">Unlock Dashboard →</button>
+      </form>
+
+      <a href="/" class="admin-back-link">← Back to site</a>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

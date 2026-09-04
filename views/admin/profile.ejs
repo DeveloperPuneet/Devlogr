@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body class="page-admin">
+  <div class="admin-shell">
+    <%- include('partials/sidebar') %>
+
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <div>
+          <h1>Profile</h1>
+          <p class="admin-sub">This powers the hero section, about card and skills grid on the homepage.</p>
+        </div>
+      </div>
+
+      <form method="POST" action="/admin/profile" class="admin-panel glass profile-form">
+        <div class="two-col">
+          <div>
+            <label>Full Name</label>
+            <input type="text" name="name" value="<%= profile.name %>" />
+          </div>
+          <div>
+            <label>Site Handle</label>
+            <input type="text" name="handle" value="<%= profile.handle %>" />
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <label>Location</label>
+            <input type="text" name="location" value="<%= profile.location %>" />
+          </div>
+          <div>
+            <label>Contact Email</label>
+            <input type="email" name="email" value="<%= profile.email %>" />
+          </div>
+        </div>
+
+        <label>Resume / CV URL <span class="label-hint">(optional)</span></label>
+        <input type="text" name="resumeUrl" value="<%= profile.resumeUrl %>" placeholder="https://..." />
+
+        <label>About Text</label>
+        <textarea name="about" rows="4"><%= profile.about %></textarea>
+
+        <label>Typewriter Words <span class="label-hint">(comma separated — rotates in the hero)</span></label>
+        <input type="text" name="taglineWords" value="<%= profile.taglineWords.join(', ') %>" />
+
+        <label>Skill Groups <span class="label-hint">(JSON — array of {"category","items":[]})</span></label>
+        <textarea name="skillGroupsJson" rows="10" class="mono-textarea"><%- JSON.stringify(profile.skillGroups, null, 2) %></textarea>
+
+        <button type="submit" class="btn btn-primary">Save Profile</button>
+      </form>
+    </main>
+  </div>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

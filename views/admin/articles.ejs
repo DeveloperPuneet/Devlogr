@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body class="page-admin">
+  <div class="admin-shell">
+    <%- include('partials/sidebar') %>
+
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <div>
+          <h1>Articles</h1>
+          <p class="admin-sub">Write, edit and publish blog posts. HTML tags like &lt;h1&gt; and &lt;img&gt; are supported.</p>
+        </div>
+        <a href="/admin/articles/new" class="btn btn-primary">+ New Article</a>
+      </div>
+
+      <% if (!articles.length) { %>
+        <p class="empty-state">No articles yet — create your first one.</p>
+      <% } %>
+
+      <div class="admin-table glass">
+        <% articles.forEach(function(a){ %>
+          <div class="admin-table-row">
+            <div class="admin-table-main">
+              <span class="admin-table-title"><%= a.title %></span>
+              <span class="admin-table-meta">/articles/<%= a.slug %> · <%= a.views %> views · <%= new Date(a.createdAt).toLocaleDateString() %></span>
+            </div>
+            <span class="pill <%= a.published ? 'pill-live' : 'pill-muted' %>"><%= a.published ? 'Published' : 'Draft' %></span>
+            <div class="admin-table-actions">
+              <a href="/articles/<%= a.slug %>" target="_blank" class="icon-btn" title="View">👁️</a>
+              <a href="/admin/articles/<%= a._id %>/edit" class="icon-btn" title="Edit">✏️</a>
+              <form method="POST" action="/admin/articles/<%= a._id %>/delete" onsubmit="return confirm('Delete this article permanently?')">
+                <button type="submit" class="icon-btn icon-btn-danger" title="Delete">🗑️</button>
+              </form>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </main>
+  </div>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

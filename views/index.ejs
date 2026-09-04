@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body class="page-home">
+  <div class="bg-blobs" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
+  </div>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <%- include('partials/nav') %>
+
+  <!-- ============== HERO ============== -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <p class="reveal eyebrow">✦ <%= profile.location %> · Open to collaborations</p>
+      <h1 class="reveal hero-title">
+        Hey, I'm <span class="gradient-text"><%= profile.name %></span>
+      </h1>
+      <div class="reveal hero-type-row">
+        <span class="hero-type-prefix">I build</span>
+        <span class="typewriter" id="typewriter" data-words='<%- JSON.stringify(profile.taglineWords) %>'></span>
+      </div>
+      <p class="reveal hero-desc"><%= profile.about %></p>
+
+      <div class="reveal hero-actions">
+        <a href="#projects" class="btn btn-primary">View Projects</a>
+        <a href="#articles" class="btn btn-ghost">Read Articles</a>
+        <% if (profile.resumeUrl) { %>
+          <a href="<%= profile.resumeUrl %>" target="_blank" class="btn btn-ghost">Resume ↗</a>
+        <% } %>
+      </div>
+
+      <div class="reveal hero-stats">
+        <div class="hero-stat"><span class="stat-num" data-count="<%= repoData.stats.totalRepos %>">0</span><span class="stat-label">Repositories</span></div>
+        <div class="hero-stat"><span class="stat-num" data-count="<%= repoData.stats.totalStars %>">0</span><span class="stat-label">Stars Earned</span></div>
+        <div class="hero-stat"><span class="stat-num" data-count="<%= repoData.stats.languages.length %>">0</span><span class="stat-label">Languages</span></div>
+        <div class="hero-stat"><span class="stat-num" data-count="3">0</span><span class="stat-label">GitHub Accounts</span></div>
+      </div>
+    </div>
+    <div class="scroll-indicator" aria-hidden="true"><span></span></div>
+  </section>
+
+  <!-- ============== TECH MARQUEE ============== -->
+  <section class="marquee-section reveal">
+    <div class="marquee">
+      <div class="marquee-track">
+        <% const marqueeSkills = profile.skillGroups.flatMap(g => g.items); %>
+        <% [1,2].forEach(function(){ %>
+          <% marqueeSkills.forEach(function(skill){ %>
+            <span class="marquee-item"><%= skill %></span>
+          <% }) %>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== ABOUT ============== -->
+  <section class="section" id="about">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">01 · About</span>
+        <h2 class="section-title">The person behind the commits</h2>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-card glass reveal">
+          <div class="about-avatar-ring">
+            <img src="https://avatars.githubusercontent.com/u/174163443?v=4" alt="<%= profile.name %>" class="about-avatar" onerror="this.style.display='none'"/>
+          </div>
+          <h3><%= profile.name %></h3>
+          <p class="about-role">Full-Stack Developer · AI/ML Explorer</p>
+          <p class="about-meta">📍 <%= profile.location %></p>
+          <p class="about-meta">✉️ <a href="mailto:<%= profile.email %>"><%= profile.email %></a></p>
+        </div>
+
+        <div class="about-text reveal">
+          <p><%= profile.about %></p>
+          <div class="about-highlights">
+            <div class="highlight-pill">🧠 Machine Learning & AI</div>
+            <div class="highlight-pill">🛠️ Developer Tools & Libraries</div>
+            <div class="highlight-pill">🌐 Full-Stack Web Apps</div>
+            <div class="highlight-pill">📦 Open-Source Projects</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== SKILLS ============== -->
+  <section class="section section-alt" id="skills">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">02 · Stack</span>
+        <h2 class="section-title">Tools I reach for</h2>
+      </div>
+
+      <div class="skills-grid">
+        <% profile.skillGroups.forEach(function(group, i){ %>
+          <div class="skill-card glass reveal" style="--delay: <%= i * 0.08 %>s">
+            <h3 class="skill-card-title"><%= group.category %></h3>
+            <div class="skill-tags">
+              <% group.items.forEach(function(item){ %>
+                <span class="skill-tag"><%= item %></span>
+              <% }) %>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== PROJECTS ============== -->
+  <section class="section" id="projects">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">03 · Projects</span>
+        <h2 class="section-title">Pulled live from GitHub</h2>
+        <p class="section-sub">Synced from three accounts — <strong>DeveloperPuneet</strong>, <strong>SovereignPuneet</strong> & <strong>Puneet-Kumar2010</strong> — and auto-sorted by activity.</p>
+      </div>
+
+      <div class="project-tabs reveal" role="tablist">
+        <button class="tab-btn active" data-tab="latest">🆕 Latest Projects <span class="tab-count"><%= repoData.latest.length %></span></button>
+        <button class="tab-btn" data-tab="working">🔧 Working On <span class="tab-count"><%= repoData.working.length %></span></button>
+        <button class="tab-btn" data-tab="other">🗂️ All Other Projects <span class="tab-count"><%= repoData.other.length %></span></button>
+      </div>
+
+      <!-- LATEST -->
+      <div class="tab-panel active" data-panel="latest">
+        <% if (!repoData.latest.length) { %>
+          <p class="empty-state">Nothing brand new right now — check the "All Other Projects" tab.</p>
+        <% } %>
+        <div class="project-grid">
+          <% repoData.latest.forEach(function(repo, i){ %>
+            <%- include('partials/project-card', { repo, i, badge: 'New' }) %>
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- WORKING ON -->
+      <div class="tab-panel" data-panel="working">
+        <% if (!repoData.working.length) { %>
+          <p class="empty-state">No active commits in the last 30 days — everything's stable for now.</p>
+        <% } %>
+        <div class="timeline">
+          <% repoData.working.forEach(function(repo, i){ %>
+            <div class="timeline-item reveal" style="--delay: <%= i * 0.06 %>s">
+              <span class="timeline-dot"></span>
+              <div class="timeline-card glass">
+                <div class="timeline-top">
+                  <h4><%= repo.name %></h4>
+                  <span class="pill pill-live">● actively committed</span>
+                </div>
+                <p><%= repo.description %></p>
+                <div class="project-meta">
+                  <span class="lang-dot" style="--lang-color: <%= repo.languageColor %>"></span>
+                  <span><%= repo.language %></span>
+                  <span>·</span>
+                  <span>updated <%= timeAgo(repo.pushedAt) %></span>
+                  <span>·</span>
+                  <span>★ <%= repo.stars %></span>
+                </div>
+                <a href="<%= repo.htmlUrl %>" target="_blank" class="project-link">View repo →</a>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- OTHER -->
+      <div class="tab-panel" data-panel="other">
+        <% if (!repoData.other.length) { %>
+          <p class="empty-state">That's everything — the two tabs above cover the full catalog.</p>
+        <% } %>
+        <div class="project-grid project-grid-compact">
+          <% repoData.other.forEach(function(repo, i){ %>
+            <%- include('partials/project-card', { repo, i, badge: null }) %>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== ARTICLES ============== -->
+  <section class="section section-alt" id="articles">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-tag">04 · Writing</span>
+        <h2 class="section-title">Latest from the blog</h2>
+        <p class="section-sub">Notes on what I'm building, breaking, and learning.</p>
+      </div>
+
+      <% if (!latestArticles.length) { %>
+        <p class="empty-state">No articles published yet — first post coming soon. 📝</p>
+      <% } else { %>
+        <div class="article-grid">
+          <% latestArticles.forEach(function(article, i){ %>
+            <a href="/articles/<%= article.slug %>" class="article-card glass reveal" style="--delay: <%= i * 0.07 %>s">
+              <% if (article.coverImage) { %>
+                <div class="article-cover" style="background-image:url('<%= article.coverImage %>')"></div>
+              <% } else { %>
+                <div class="article-cover article-cover-placeholder">
+                  <span><%= article.title.slice(0,2).toUpperCase() %></span>
+                </div>
+              <% } %>
+              <div class="article-card-body">
+                <div class="article-tags">
+                  <% (article.tags || []).slice(0,3).forEach(function(tag){ %><span class="tag-chip"><%= tag %></span><% }) %>
+                </div>
+                <h3><%= article.title %></h3>
+                <p><%= article.excerpt %></p>
+                <div class="article-meta">
+                  <span><%= new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></span>
+                  <span>·</span>
+                  <span><%= article.readTimeMinutes %> min read</span>
+                </div>
+              </div>
+            </a>
+          <% }) %>
+        </div>
+      <% } %>
+
+      <div class="section-cta reveal">
+        <a href="/articles" class="btn btn-ghost">View all articles →</a>
+      </div>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+</body>
+</html>

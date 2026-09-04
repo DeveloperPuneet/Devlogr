@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body class="page-admin">
+  <div class="admin-shell">
+    <%- include('partials/sidebar') %>
+
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <div>
+          <h1>Links</h1>
+          <p class="admin-sub">GitHub profiles, socials, and any custom links shown in the footer.</p>
+        </div>
+      </div>
+
+      <div class="admin-panel glass">
+        <h3>Add a Link</h3>
+        <form method="POST" action="/admin/links/new" class="inline-form">
+          <input type="text" name="label" placeholder="Label — e.g. GitHub · Main" required />
+          <input type="text" name="url" placeholder="https://github.com/DeveloperPuneet" required />
+          <select name="type">
+            <option value="github">GitHub</option>
+            <option value="social">Social</option>
+            <option value="contact">Contact</option>
+            <option value="custom" selected>Custom</option>
+          </select>
+          <input type="number" name="order" placeholder="Order" value="0" style="max-width:90px" />
+          <button type="submit" class="btn btn-primary">+ Add</button>
+        </form>
+      </div>
+
+      <div class="admin-table glass">
+        <% if (!links.length) { %>
+          <p class="empty-state">No links yet — add your GitHub profiles, Instagram, etc. above.</p>
+        <% } %>
+        <% links.forEach(function(link){ %>
+          <form method="POST" action="/admin/links/<%= link._id %>/edit" class="admin-table-row admin-table-row-form">
+            <input type="text" name="label" value="<%= link.label %>" class="table-input" />
+            <input type="text" name="url" value="<%= link.url %>" class="table-input table-input-wide" />
+            <select name="type" class="table-input">
+              <option value="github" <%= link.type === 'github' ? 'selected' : '' %>>GitHub</option>
+              <option value="social" <%= link.type === 'social' ? 'selected' : '' %>>Social</option>
+              <option value="contact" <%= link.type === 'contact' ? 'selected' : '' %>>Contact</option>
+              <option value="custom" <%= link.type === 'custom' ? 'selected' : '' %>>Custom</option>
+            </select>
+            <input type="number" name="order" value="<%= link.order %>" class="table-input" style="max-width:70px" />
+            <label class="checkbox-row" style="margin:0"><input type="checkbox" name="visible" <%= link.visible ? 'checked' : '' %> /> Visible</label>
+            <div class="admin-table-actions">
+              <button type="submit" class="icon-btn" title="Save">💾</button>
+            </div>
+          </form>
+          <form method="POST" action="/admin/links/<%= link._id %>/delete" onsubmit="return confirm('Delete this link?')" class="delete-form-inline">
+            <button type="submit" class="icon-btn icon-btn-danger" title="Delete">🗑️ Delete "<%= link.label %>"</button>
+          </form>
+        <% }) %>
+      </div>
+    </main>
+  </div>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

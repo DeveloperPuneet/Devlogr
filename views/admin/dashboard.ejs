@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body class="page-admin">
+  <div class="admin-shell">
+    <%- include('partials/sidebar') %>
+
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <div>
+          <h1>Dashboard</h1>
+          <p class="admin-sub">Welcome back, <%= profile.name %>. Here's the state of Devlogr.</p>
+        </div>
+        <a href="/admin/articles/new" class="btn btn-primary">+ New Article</a>
+      </div>
+
+      <div class="admin-stat-grid">
+        <div class="admin-stat-card glass">
+          <span class="admin-stat-num"><%= articleCount %></span>
+          <span class="admin-stat-label">Total Articles</span>
+        </div>
+        <div class="admin-stat-card glass">
+          <span class="admin-stat-num"><%= repoData.stats.totalRepos %></span>
+          <span class="admin-stat-label">GitHub Repos Tracked</span>
+        </div>
+        <div class="admin-stat-card glass">
+          <span class="admin-stat-num"><%= repoData.latest.length %></span>
+          <span class="admin-stat-label">Latest Projects</span>
+        </div>
+        <div class="admin-stat-card glass">
+          <span class="admin-stat-num"><%= repoData.working.length %></span>
+          <span class="admin-stat-label">Currently Working On</span>
+        </div>
+        <div class="admin-stat-card glass">
+          <span class="admin-stat-num"><%= repoData.stats.totalStars %></span>
+          <span class="admin-stat-label">Total Stars</span>
+        </div>
+        <div class="admin-stat-card glass">
+          <span class="admin-stat-num"><%= links.length %></span>
+          <span class="admin-stat-label">Links Configured</span>
+        </div>
+      </div>
+
+      <div class="admin-panels">
+        <div class="admin-panel glass">
+          <div class="admin-panel-head">
+            <h3>Recent Articles</h3>
+            <a href="/admin/articles">Manage all →</a>
+          </div>
+          <% if (!articles.length) { %>
+            <p class="empty-state">No articles yet.</p>
+          <% } %>
+          <ul class="admin-list">
+            <% articles.forEach(function(a){ %>
+              <li>
+                <span class="admin-list-title"><%= a.title %></span>
+                <span class="pill <%= a.published ? 'pill-live' : 'pill-muted' %>"><%= a.published ? 'Published' : 'Draft' %></span>
+              </li>
+            <% }) %>
+          </ul>
+        </div>
+
+        <div class="admin-panel glass">
+          <div class="admin-panel-head">
+            <h3>Latest Synced Projects</h3>
+            <a href="/admin/projects">Manage all →</a>
+          </div>
+          <% if (!repoData.latest.length) { %>
+            <p class="empty-state">No new repos in the last 90 days.</p>
+          <% } %>
+          <ul class="admin-list">
+            <% repoData.latest.slice(0,6).forEach(function(r){ %>
+              <li>
+                <span class="admin-list-title"><%= r.name %></span>
+                <span class="admin-list-meta"><%= r.language %> · ★<%= r.stars %></span>
+              </li>
+            <% }) %>
+          </ul>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

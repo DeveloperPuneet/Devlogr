@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body class="page-articles">
+  <div class="bg-blobs" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+  </div>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <%- include('partials/nav') %>
+
+  <section class="section page-header">
+    <div class="container">
+      <p class="reveal eyebrow">✦ The Devlogr Blog</p>
+      <h1 class="reveal page-title">Articles &amp; <span class="gradient-text">Blogs</span></h1>
+      <p class="reveal section-sub">Deep dives, build logs, and half-finished thoughts about code.</p>
+
+      <% if (allTags && allTags.length) { %>
+        <div class="tag-filter reveal">
+          <a href="/articles" class="tag-chip-filter <%= !activeTag ? 'active' : '' %>">All</a>
+          <% allTags.forEach(function(tag){ %>
+            <a href="/articles?tag=<%= encodeURIComponent(tag) %>" class="tag-chip-filter <%= activeTag === tag ? 'active' : '' %>"><%= tag %></a>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <% if (!articles.length) { %>
+        <p class="empty-state">No articles found<% if (activeTag) { %> for tag "<%= activeTag %>"<% } %>. 📝</p>
+      <% } else { %>
+        <div class="article-grid">
+          <% articles.forEach(function(article, i){ %>
+            <a href="/articles/<%= article.slug %>" class="article-card glass reveal" style="--delay: <%= (i % 6) * 0.06 %>s">
+              <% if (article.coverImage) { %>
+                <div class="article-cover" style="background-image:url('<%= article.coverImage %>')"></div>
+              <% } else { %>
+                <div class="article-cover article-cover-placeholder"><span><%= article.title.slice(0,2).toUpperCase() %></span></div>
+              <% } %>
+              <div class="article-card-body">
+                <div class="article-tags">
+                  <% (article.tags || []).slice(0,3).forEach(function(tag){ %><span class="tag-chip"><%= tag %></span><% }) %>
+                </div>
+                <h3><%= article.title %></h3>
+                <p><%= article.excerpt %></p>
+                <div class="article-meta">
+                  <span><%= new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></span>
+                  <span>·</span>
+                  <span><%= article.readTimeMinutes %> min read</span>
+                </div>
+              </div>
+            </a>
+          <% }) %>
+        </div>
+
+        <% if (totalPages > 1) { %>
+          <div class="pagination reveal">
+            <% for (let p = 1; p <= totalPages; p++) { %>
+              <a href="/articles?page=<%= p %><%= activeTag ? '&tag=' + encodeURIComponent(activeTag) : '' %>" class="page-btn <%= p === currentPage ? 'active' : '' %>"><%= p %></a>
+            <% } %>
+          </div>
+        <% } %>
+      <% } %>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+</body>
+</html>

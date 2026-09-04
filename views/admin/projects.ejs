@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body class="page-admin">
+  <div class="admin-shell">
+    <%- include('partials/sidebar') %>
+
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <div>
+          <h1>Projects</h1>
+          <p class="admin-sub">Repos are pulled live from GitHub. Override descriptions, pin, hide, or force a category below.</p>
+        </div>
+        <form method="POST" action="/admin/projects/refresh">
+          <button type="submit" class="btn btn-ghost">↻ Force Refresh from GitHub</button>
+        </form>
+      </div>
+
+      <div class="admin-table glass">
+        <% repoData.all.forEach(function(repo){ %>
+          <form method="POST" action="/admin/projects/override" class="project-override-row">
+            <input type="hidden" name="fullName" value="<%= repo.fullName %>" />
+            <div class="project-override-head">
+              <strong><%= repo.name %></strong>
+              <span class="admin-list-meta">@<%= repo.owner %> · <%= repo.language %> · ★<%= repo.stars %> · updated <%= timeAgo(repo.updatedAt) %></span>
+              <a href="<%= repo.htmlUrl %>" target="_blank" class="icon-btn">↗</a>
+            </div>
+            <label>Custom Description</label>
+            <textarea name="customDescription" rows="2"><%= repo.description %></textarea>
+            <div class="two-col">
+              <div>
+                <label>Live Demo / Custom Link</label>
+                <input type="text" name="customLink" value="<%= repo.customLink %>" placeholder="https://your-live-demo.com" />
+              </div>
+              <div>
+                <label>Force Category</label>
+                <select name="category">
+                  <option value="auto" <%= repo.categoryOverride === 'auto' ? 'selected' : '' %>>Auto (smart sort)</option>
+                  <option value="latest" <%= repo.categoryOverride === 'latest' ? 'selected' : '' %>>Latest Projects</option>
+                  <option value="working" <%= repo.categoryOverride === 'working' ? 'selected' : '' %>>Working On</option>
+                  <option value="other" <%= repo.categoryOverride === 'other' ? 'selected' : '' %>>All Other Projects</option>
+                </select>
+              </div>
+            </div>
+            <div class="project-override-footer">
+              <label class="checkbox-row"><input type="checkbox" name="pinned" <%= repo.pinned ? 'checked' : '' %> /> 📌 Pin to Latest</label>
+              <label class="checkbox-row"><input type="checkbox" name="hidden" <%= repo.hidden ? 'checked' : '' %> /> 🙈 Hide from site</label>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        <% }) %>
+      </div>
+    </main>
+  </div>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<article class="project-card glass reveal tilt" style="--delay: <%= (typeof i !== 'undefined' ? i : 0) * 0.06 %>s">
+  <% if (typeof badge !== 'undefined' && badge) { %>
+    <span class="project-badge"><%= badge %></span>
+  <% } %>
+  <% if (repo.fork) { %>
+    <span class="project-badge project-badge-fork">Fork</span>
+  <% } %>
+
+  <div class="project-card-top">
+    <h3 class="project-name"><%= repo.name %></h3>
+    <span class="project-owner">@<%= repo.owner %></span>
+  </div>
+
+  <p class="project-desc"><%= repo.description %></p>
+
+  <% if (repo.topics && repo.topics.length) { %>
+    <div class="project-topics">
+      <% repo.topics.slice(0,4).forEach(function(t){ %><span class="topic-chip">#<%= t %></span><% }) %>
+    </div>
+  <% } %>
+
+  <div class="project-meta">
+    <span class="lang-dot" style="--lang-color: <%= repo.languageColor %>"></span>
+    <span><%= repo.language %></span>
+    <span>·</span>
+    <span>★ <%= repo.stars %></span>
+    <span>·</span>
+    <span>⑂ <%= repo.forks %></span>
+  </div>
+
+  <div class="project-card-footer">
+    <span class="project-updated">updated <%= timeAgo(repo.updatedAt) %></span>
+    <a href="<%= repo.htmlUrl %>" target="_blank" class="project-link">Code →</a>
+  </div>
+
+  <% if (repo.customLink) { %>
+    <a href="<%= repo.customLink %>" target="_blank" class="project-live-link">Live demo ↗</a>
+  <% } %>
+</article>

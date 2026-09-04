@@ -1,0 +1,37 @@
+<footer class="site-footer" id="contact">
+  <div class="footer-glow"></div>
+  <div class="container footer-inner">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <img src="/images/logo.svg" alt="Devlogr logo" class="brand-logo" />
+        <span class="brand-text">Devlogr</span>
+        <p class="footer-tagline">Building. Breaking. Learning. Repeat.</p>
+      </div>
+
+      <div class="footer-links">
+        <h4>Elsewhere</h4>
+        <ul>
+          <% if (typeof links !== 'undefined' && links.length) { %>
+            <% links.forEach(function(link){ %>
+              <li><a href="<%= link.url %>" target="_blank" rel="noopener noreferrer"><%= link.label %></a></li>
+            <% }) %>
+          <% } %>
+          <li><a href="mailto:<%= (typeof profile !== 'undefined' && profile.email) || 'developerpuneet2010@gmail.com' %>">Email Me</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-cta">
+        <h4>Let's build something</h4>
+        <p>Got an idea, a bug bounty, or just want to talk shop?</p>
+        <a class="btn btn-primary" href="mailto:<%= (typeof profile !== 'undefined' && profile.email) || 'developerpuneet2010@gmail.com' %>">Say Hello →</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© <%= currentYear %> Puneet Kumar Mishra · Devlogr</span>
+      <a href="/admin/login" class="footer-admin-link">Admin</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>

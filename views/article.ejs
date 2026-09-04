@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body class="page-article">
+  <div class="bg-blobs" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+  </div>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <%- include('partials/nav') %>
+
+  <article class="section article-single">
+    <div class="container article-container">
+      <a href="/articles" class="back-link reveal">← All articles</a>
+
+      <div class="article-tags reveal">
+        <% (article.tags || []).forEach(function(tag){ %><span class="tag-chip"><%= tag %></span><% }) %>
+      </div>
+
+      <h1 class="reveal article-title"><%= article.title %></h1>
+
+      <div class="article-byline reveal">
+        <span><%= new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) %></span>
+        <span>·</span>
+        <span><%= article.readTimeMinutes %> min read</span>
+        <span>·</span>
+        <span><%= article.views %> views</span>
+      </div>
+
+      <% if (article.coverImage) { %>
+        <div class="article-hero-cover reveal" style="background-image:url('<%= article.coverImage %>')"></div>
+      <% } %>
+
+      <div class="article-body reveal">
+        <%- article.content %>
+      </div>
+
+      <% if (related.length) { %>
+        <div class="related-section reveal">
+          <h3>Related reads</h3>
+          <div class="article-grid">
+            <% related.forEach(function(r){ %>
+              <a href="/articles/<%= r.slug %>" class="article-card glass">
+                <% if (r.coverImage) { %>
+                  <div class="article-cover" style="background-image:url('<%= r.coverImage %>')"></div>
+                <% } else { %>
+                  <div class="article-cover article-cover-placeholder"><span><%= r.title.slice(0,2).toUpperCase() %></span></div>
+                <% } %>
+                <div class="article-card-body">
+                  <h3><%= r.title %></h3>
+                  <p><%= r.excerpt %></p>
+                </div>
+              </a>
+            <% }) %>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </article>
+
+  <%- include('partials/footer') %>
+</body>
+</html>

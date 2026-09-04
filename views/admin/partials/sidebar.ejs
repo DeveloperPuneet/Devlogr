@@ -1,0 +1,21 @@
+<aside class="admin-sidebar">
+  <a href="/" class="brand admin-brand">
+    <img src="/images/logo.svg" alt="Devlogr logo" class="brand-logo" />
+    <span class="brand-text">Devlogr</span>
+  </a>
+
+  <nav class="admin-nav">
+    <a href="/admin/dashboard" class="admin-nav-link <%= page === 'dashboard' ? 'active' : '' %>">📊 Dashboard</a>
+    <a href="/admin/articles" class="admin-nav-link <%= page === 'articles' ? 'active' : '' %>">📝 Articles</a>
+    <a href="/admin/projects" class="admin-nav-link <%= page === 'projects' ? 'active' : '' %>">🗂️ Projects</a>
+    <a href="/admin/links" class="admin-nav-link <%= page === 'links' ? 'active' : '' %>">🔗 Links</a>
+    <a href="/admin/profile" class="admin-nav-link <%= page === 'profile' ? 'active' : '' %>">🧑‍💻 Profile</a>
+  </nav>
+
+  <div class="admin-sidebar-bottom">
+    <a href="/" target="_blank" class="admin-nav-link">↗ View live site</a>
+    <form method="POST" action="/admin/logout">
+      <button type="submit" class="admin-nav-link admin-logout-btn">⎋ Logout</button>
+    </form>
+  </div>
+</aside>
